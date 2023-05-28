@@ -82,7 +82,7 @@ Assuming a KMS key being created, name "_KMS-KEY-A_".
 ##### This can be skipped if you ran 101/102
 
 ```shell
-  cd example/103-breast-cancer-classifier-eks-example
+  cd examples/103-breast-cancer-classifier-eks-example
   docker build ./ -t "enclave_base"
 ```
 
@@ -92,7 +92,7 @@ Assuming a KMS key being created, name "_KMS-KEY-A_".
 
 ```shell
 
-   cd example/103-breast-cancer-classifier-eks-example/enclaveServer
+   cd examples/103-breast-cancer-classifier-eks-example/enclaveServer
    pip3 install -r requirements.txt
    python3 ./encrypt_model.py --kms_arn=<input the KMS ARN you get from step 2>
    
