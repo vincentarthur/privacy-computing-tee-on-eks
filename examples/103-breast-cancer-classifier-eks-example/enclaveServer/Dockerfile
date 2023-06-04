@@ -8,7 +8,7 @@ FROM enclave_base
 RUN yum install python3 iproute -y
 ENV AWS_STS_REGIONAL_ENDPOINTS=regional
 ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/app
-ENV AWS_DEFAULT_REGION=us-east-
+#ENV AWS_DEFAULT_REGION=us-east-1
 
 WORKDIR /app
 

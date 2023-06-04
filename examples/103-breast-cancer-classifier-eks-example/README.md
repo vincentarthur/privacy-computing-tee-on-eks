@@ -242,7 +242,7 @@ Assuming a KMS key being created, name "_KMS-KEY-A_".
    
    #1 - Encrypt the prepared image
    export AWS_DEFAULT_REGION=$REGION
-   python3 ./encryptor.py --filePath ./0_L_CC.png --cmkId alias/EnclaveKMSkey --region $AWS_DEFAULT_REGION
+   python3 ./encryptor.py --filePath ./0_L_CC.png --cmkId alias/EnclaveKMSKey --region $AWS_DEFAULT_REGION
    
    # Verify that the output contains: file encrypted? True
    

@@ -6,17 +6,17 @@ readonly ENCLAVE_CPU_COUNT=2
 readonly ENCLAVE_MEMORY_SIZE=18000
 
 main() {
-    nitro-cli run-enclave --cpu-count $ENCLAVE_CPU_COUNT --memory $ENCLAVE_MEMORY_SIZE \
-        --eif-path $EIF_PATH --debug-mode --enclave-cid 99999
+  nitro-cli run-enclave --cpu-count $ENCLAVE_CPU_COUNT --memory $ENCLAVE_MEMORY_SIZE \
+    --eif-path $EIF_PATH --debug-mode --enclave-cid 99999
 
-    vsock-proxy 8000 kms.us-east-1.amazonaws.com 443 &
+  vsock-proxy 8000 kms."${REGION}".amazonaws.com 443 &
 
-    local enclave_id=$(nitro-cli describe-enclaves | jq -r ".[0].EnclaveID")
-    echo "-------------------------------"
-    echo "Enclave ID is $enclave_id"
-    echo "-------------------------------"
+  local enclave_id=$(nitro-cli describe-enclaves | jq -r ".[0].EnclaveID")
+  echo "-------------------------------"
+  echo "Enclave ID is $enclave_id"
+  echo "-------------------------------"
 
-    nitro-cli console --enclave-id $enclave_id # blocking call.
+  nitro-cli console --enclave-id "${enclave_id}" # blocking call.
 }
 
 main

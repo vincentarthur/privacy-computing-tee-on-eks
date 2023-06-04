@@ -30,7 +30,7 @@ TEMP_IMAGE_FILE_LOCATION = "/tmp/temp_file.png"
 
 
 # def decrypt_cipher(access, secret, token, ciphertext, region):
-def decrypt_cipher(credential, encrypted_data, region, kms_key_id):
+def decrypt_cipher(credential, encrypted_data, region):
     """
     use KMS Tool Enclave Cli to decrypt cipher text, via nitro_kms
     """
@@ -59,9 +59,6 @@ def get_plaintext(payload):
     # adhoc change for resolving issue - unable to os.getenv 
     region = payload['region']
 
-    # Get KMS Key ID
-    kms_key_id = payload['kms_key_id']  # arn_id
-
     file_contents = base64.b64decode(encrypted_file.encode('utf-8'))
 
     # The first NUM_BYTES_FOR_LEN tells us the length of the encrypted data key
@@ -73,7 +70,7 @@ def get_plaintext(payload):
     local_data_key_encrypted_string = local_data_key_encrypted.decode('utf-8')
 
     # Decrypt the data key before using it
-    data_key_plaintext = decrypt_cipher(irsa_credential, local_data_key_encrypted_string, region, kms_key_id)
+    data_key_plaintext = decrypt_cipher(irsa_credential, local_data_key_encrypted_string, region)
 
     f = Fernet(data_key_plaintext)
     file_contents_decrypted = f.decrypt(file_contents[data_key_encrypted_len:])
@@ -145,9 +142,6 @@ def decrypt_model(payload):
     # adhoc change for resolving issue - unable to os.getenv 
     region = payload['region']
 
-    # Get KMS Key ID
-    kms_key_id = payload['kms_key_id']  # arn_id
-
     # Read the encrypted file into memory
     src_dir = "/app/breast_cancer_classifier/models/"
     file_name = "ImageOnly__ModeImage_weights.p"
@@ -164,7 +158,7 @@ def decrypt_model(payload):
     local_data_key_encrypted_string = local_data_key_encrypted.decode('utf-8')
 
     # Decrypt the data key before using it
-    data_key_plaintext = decrypt_cipher(irsa_credential, local_data_key_encrypted_string, region, kms_key_id)
+    data_key_plaintext = decrypt_cipher(irsa_credential, local_data_key_encrypted_string, region)
     if data_key_plaintext is None:
         return False
 

@@ -32,7 +32,5 @@ spec:
         env:
         - name: CID
           value: "99999"
-        - name: KMS_KEY_ID
-          value: "arn:aws:kms:us-east-1:536704830979:key/b4c01ff4-8a9f-4ee3-b3fc-87bf852c0369"
         - name: REGION
           value: "us-east-1"
