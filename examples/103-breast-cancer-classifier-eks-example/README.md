@@ -97,7 +97,7 @@ Assuming a KMS key being created, name "_KMS-KEY-A_".
    python3 ./encrypt_model.py --kms_arn=<input the KMS ARN you get from step 2>
    
    # move out the original file to avoid overpackaging
-   mv ./breast_cancer_classifer/models/ImageOnly__ModeImage_weights.p ../
+   mv ./breast_cancer_classifier/models/ImageOnly__ModeImage_weights.p ../
 
 ```
 
