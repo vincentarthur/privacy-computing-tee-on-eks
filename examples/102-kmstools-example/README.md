@@ -6,4 +6,4 @@ implementating fully secure processing.
 
 ** The KMS key is from other ACCOUNT, acting as TECH_Provider decryption key.
 
-- [02. KMS Integration](./readmes/03_simple_examples/02_kms_integration.md)
+- [02. KMS Integration](/readmes/03_simple_examples/02_kms_integration.md)
