@@ -38,3 +38,31 @@
 2. The KMS key used to encrypt inference result in `Server Side`, is exactly same KMS key to decrypt the data. <br/>
    So no leakage risk, due to PCR0 condition has been added to KMS Key policy to restrict access from EIF and IRSA. Only
    IRSA does not work.
+
+---
+
+### Data Owner how to decrypt data ?
+
+⚠️ Please run below sections in an environment with sufficient permission (like EC2/Cloud9 with S3 bucket & KMS access)
+
+1. Under `utils` folder, there is a `end_user_decrypt_data_sample.py`. User needs to change line 69 & 70:
+
+```python
+bucket_name = "<S3_Bucket_with_Replication_from_TechProvider>"
+object_name = "<Encrypted result file name (with prefix)>"
+```
+
+2. Install required dependencies
+
+```shell
+pip install -r requirements.txt
+```
+
+3. Run below command to decrypt result
+
+```shell
+python3 end_user_decrypt_data_sample.py
+```
+
+---
+
