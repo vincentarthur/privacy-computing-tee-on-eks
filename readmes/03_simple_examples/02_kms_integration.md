@@ -26,7 +26,7 @@ weight: 10
    ACCOUNT_ID=$(aws sts get-caller-identity --query "Account" --output text)
    REGION=$(curl http://169.254.169.254/latest/meta-data/placement/region -s)
    bucket_name="industry-tee-solution-workshop-${ACCOUNT_ID}-${REGION}-kms-bucket"
-   aws s3 mb ${bucket_name} --region ${REGION}
+   aws s3 mb s3://${bucket_name} --region ${REGION}
 ```
 
 ### 创建一个用于加密数据的KMS key (DataKeyForEnclaves)<br />
@@ -40,13 +40,13 @@ weight: 10
     DATA_KEY_ID=$(aws kms create-key --description "KMS for Data En/Decryption" --region ${REGION} | grep "KeyId" |perl -p -E "s/((.*)\:\s\")|(\",)//g")
     
     # Create Alias for identification
-    aws kms create-alias --alias-name alias/DataKeyForEnclaves --target-key-id ${DATA_KEY_ID}
+    aws kms create-alias --alias-name alias/DataKeyForEnclaves --target-key-id ${DATA_KEY_ID} --region ${REGION}
 ```
 
 2. 通过以下命令获得KMS Key Policy
 
 ```shell
-    aws kms get-key-policy --key-id ${DATA_KEY_ID} --policy-name default --output text > DATA_KEY_ID_key_policy.json
+    aws kms get-key-policy --key-id ${DATA_KEY_ID} --policy-name default --output text --region ${REGION}> DATA_KEY_ID_key_policy.json
 ```
 
 3. 在Cloud9 以下路径找到`DATA_KEY_ID_key_policy.json` 并双击打开
@@ -75,7 +75,7 @@ weight: 10
       "Sid": "Allow use of IRSA",
       "Effect": "Allow",
       "Principal": {
-        "AWS": "arn:aws:iam::<ACCOUNT_ID>:role/privacy-computing-eks-irsa"
+        "AWS": "arn:aws:iam::<ACCOUNT_ID>:role/privacy-computing-eks-irsa-role"
       },
       "Action": [
         "kms:Encrypt",
@@ -94,7 +94,7 @@ weight: 10
 5. 更新KMS 策略
 
 ```shell
-    aws kms put-key-policy --policy-name default --key-id ${DATA_KEY_ID} --policy file://DATA_KEY_ID_key_policy.json
+    aws kms put-key-policy --policy-name default --key-id ${DATA_KEY_ID} --policy file://DATA_KEY_ID_key_policy.json --region ${REGION}
 ```
 
 ### 修改 IRSA iam role 权限，加入S3
@@ -137,7 +137,7 @@ weight: 10
 ```shell
     #cd examples/102-kmstools-example
     
-    data_kms_key_arn_id=$(aws kms describe-key --key-id ${DATA_KEY_ID} | grep "Arn" | perl -p -E "s/((.*)\:\s\")|(\",)//g")
+    data_kms_key_arn_id=$(aws kms describe-key --key-id ${DATA_KEY_ID} --region ${REGION}| grep "Arn" | perl -p -E "s/((.*)\:\s\")|(\",)//g")
     
     bash generate-and-upload-encrypted-data.sh ${bucket_name} ${data_kms_key_arn_id} ${REGION}
     
