@@ -1,4 +1,4 @@
-readonly EIF_PATH="/home/simple-ne-server.eif"
+readonly EIF_PATH="/app/simple-ne-server.eif"
 
 # Enclaves running on x86 instances must have whole numbers of vCPUs, in multiples of 2, since whole cores (not hyperthreads) are sliced off and dedicated to the enclave, for security.
 # The minimum core count is 2. The following error appears to be about memory, but is actually due to 1 core being specified instead of 2.

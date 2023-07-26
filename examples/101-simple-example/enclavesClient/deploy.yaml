@@ -23,7 +23,7 @@ spec:
       serviceAccountName: fl-ksa
       containers:
       - image: 536704830979.dkr.ecr.us-east-1.amazonaws.com/simple-ne-client:latest
-        command: ["sleep", "36000"]
+#        command: ["sleep", "36000"]
         imagePullPolicy: Always
         name: client
         ports:
