@@ -1,0 +1,60 @@
+# // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+# // SPDX-License-Identifier: MIT-0
+
+#this is the enclave image
+FROM enclave_base as base
+
+# Install python for running the server and net-tools for modifying network config
+RUN amazon-linux-extras install aws-nitro-enclaves-cli && \
+    yum install aws-nitro-enclaves-cli-devel jq util-linux \
+        python3 iproute unzip curl which file -y
+
+# Install awscli v2
+RUN \
+    cd /tmp && \
+    curl "https://awscli.amazonaws.com/awscli-exe-linux-$(arch).zip" -o "awscliv2.zip" && \
+    unzip awscliv2.zip && \
+    ./aws/install
+
+WORKDIR /ne-deps
+
+RUN BINS="\
+    /usr/bin/nitro-cli \
+    /usr/bin/nitro-enclaves-allocator \
+    /usr/bin/jq \
+    /usr/local/bin/aws \
+    /usr/bin/vsock-proxy \
+    /usr/bin/file \
+    /usr/bin/lscpu \
+    /usr/bin/which \
+    " && \
+    for bin in $BINS; do \
+        { echo "$bin"; ldd "$bin" | grep -Eo "/.*lib.*/[^ ]+"; } | \
+            while read path; do \
+                mkdir -p ".$(dirname $path)"; \
+                cp -fL "$path" ".$path"; \
+            done \
+    done
+
+RUN \
+    mkdir -p /ne-deps/etc/nitro_enclaves && \
+    mkdir -p /ne-deps/run/nitro_enclaves && \
+    mkdir -p /ne-deps/var/log/nitro_enclaves && \
+    cp -rf /usr/share/nitro_enclaves/ /ne-deps/usr/share/ && \
+    cp -f /etc/nitro_enclaves/allocator.yaml /ne-deps/etc/nitro_enclaves/allocator.yaml && \
+    cp -rf /usr/local/ /ne-deps/usr/ && \
+    cp -f /etc/nitro_enclaves/vsock-proxy.yaml /ne-deps/etc/nitro_enclaves
+
+
+FROM enclave_base as image
+    
+ENV AWS_STS_REGIONAL_ENDPOINTS=regional
+ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home
+
+COPY --from=base /ne-deps /
+
+COPY simple-ne-server.eif /app
+COPY run.sh /app
+RUN chmod u+x /app/run.sh
+
+CMD ["bash /app/run.sh"]
