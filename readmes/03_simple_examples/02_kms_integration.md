@@ -161,7 +161,7 @@ weight: 10
 3. 创建一个执行层面的Docker Image，并将EIF文件拷贝进去。
 
 ```shell
-   docker build -t simple-ne-server:latest_eif -f Dockerfile.eif
+   docker build -t simple-ne-server:latest_eif -f Dockerfile.eif .
 ```
 
 4. 创建一个ECR repository，用于存放镜像 (如果101 执行过可以跳过此步骤)
