@@ -148,7 +148,7 @@ weight: 10
 1. 进行Server side image 的构建 <br/>
 
 ```shell
-    cd 102-simple-example/enclavesServer
+    cd 102-kmstools-example/enclavesServer
     docker build -t simple-ne-server:latest .
 ```
 
@@ -212,7 +212,7 @@ weight: 10
 9. 进入到Client 的文件夹并构建镜像
 
 ```shell
-    # was in 102-simple-example/enclavesServer
+    # was in 102-kmstools-example/enclavesServer
     cd ../enclavesClient
     docker build -t simple-ne-client:latest .
 ```

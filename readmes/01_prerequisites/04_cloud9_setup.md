@@ -31,6 +31,12 @@ https://us-east-1.console.aws.amazon.com/cloud9control/home?region=us-east-1#/
     
     sudo growpart /dev/nvme0n1 1
     sudo xfs_growfs -d /
+    
+    curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+    unzip awscliv2.zip
+    sudo ./aws/install --bin-dir /usr/local/bin --install-dir /usr/local/aws-cli --update
+    echo "alias aws='/usr/local/bin/aws'" >> ~/.bashrc
+    source ~/.bashrc
 ```
 
 6. 安装完成后，重新开启新的 terminal激活Docker在当前账户使用。
