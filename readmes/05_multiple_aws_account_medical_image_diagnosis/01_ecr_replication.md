@@ -39,7 +39,7 @@ weight: 10
    ![industryscenario-2-multi-account-tech-p-ca-r.png](/static/industryscenario-2-multi-account-tech-p-ca-r.png) <br /><br />
 
 7. 在Repository filters中输入`breast-cancer-classifier`，并点击`Add`。该值用于限定仅此repo和镜像会被同步复制到对方ECR <br /><br />
-   ![industryscenario-2-multi-account-tech-p-repo-filter.png](static/industryscenario-2-multi-account-tech-p-repo-filter.png) <br /><br />
+   ![industryscenario-2-multi-account-tech-p-repo-filter.png](/static/industryscenario-2-multi-account-tech-p-repo-filter.png) <br /><br />
 
 8. 点击`Submit Rule` <br />
 
