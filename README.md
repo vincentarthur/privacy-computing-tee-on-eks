@@ -68,6 +68,19 @@ Please follow below sections to start and experience.
 - [09. Data Owner Triggers Inference](./readmes/05_multiple_aws_account_medical_image_diagnosis/09_data_owner_inference.md)
 - [10. Add PCR0 for Cryptographic Attestation](./readmes/05_multiple_aws_account_medical_image_diagnosis/10_add_pcr0_for_cryptographic_attestation.md)
 
+### [Multiple AWS Accounts] Medical Image Diagnosis - With WebUI
+
+- [01. ECR Replication Setup](./readmes/06_multiple_aws_account_medical_image_diagnosis_with_ui/01_ecr_replication.md)
+- [02. Data Owner Setup IRSA](./readmes/06_multiple_aws_account_medical_image_diagnosis_with_ui/02_data_owner_create_irsa.md)
+- [03. Data Owner Creates Data KMS Key](./readmes/06_multiple_aws_account_medical_image_diagnosis_with_ui/03_data_owner_create_data_kms_key.md)
+- [04. Tech Provider Creates Model KMS Key](./readmes/06_multiple_aws_account_medical_image_diagnosis_with_ui/04_tech_provider_create_model_kms_key.md)
+- [05. Tech Provider Builds Server app](./readmes/06_multiple_aws_account_medical_image_diagnosis_with_ui/05_tech_provider_create_server_app_image.md)
+- [06. Data Owner Updates IAM Policy](./readmes/06_multiple_aws_account_medical_image_diagnosis_with_ui/06_data_owner_update_iam_policy.md)
+- [07. Data Owner Builds Env](./readmes/06_multiple_aws_account_medical_image_diagnosis_with_ui/07_data_owner_build_env.md)
+- [08. Data Owner Builds Apps](./readmes/06_multiple_aws_account_medical_image_diagnosis_with_ui/08_data_owner_build_apps.md)
+- [09. Data Owner Triggers Inference](./readmes/06_multiple_aws_account_medical_image_diagnosis_with_ui/09_data_owner_inference.md)
+- [10. Add PCR0 for Cryptographic Attestation](./readmes/06_multiple_aws_account_medical_image_diagnosis_with_ui/10_add_pcr0_for_cryptographic_attestation.md)
+
 ### Summary
 
 - [Summary](./readmes/10_summary/summary.md)
