@@ -70,7 +70,7 @@ weight: 10
 
 ```shell
     # cluster-eks_enclaves为集群名字，如需修改可在上一步骤中进行
-    bash 02_setup_irsa.sh cluster-eks_enclaves
+    bash 02_setup_irsa.sh cluster-eks-enclaves
 ```
 
 ![image.png](/static/workshop-step-3-deploy-irsa.png)<br/>

@@ -118,13 +118,11 @@ def list_all_images():
             "image_name": obj['Key'].split("/")[-1],
             "image_location": f"s3://{s3_bucket_name}/{obj['Key']}",
             # Generate Presigned URL for UI to retrieve
-            "presigned_url": s3_cli.generate_presigned_url('get_object', Params={'Bucket': s3_bucket_name,
-                                                                                 'Key': "{}/{}.{}".format("thumbnails",
-                                                                                                          obj[
-                                                                                                              'Key'].split(
-                                                                                                              "/")[-1],
-                                                                                                          "thumbnail")},
-                                                           ExpiresIn=300),  # 1hour
+            "presigned_url": s3_cli.generate_presigned_url(
+                'get_object', Params={
+                    'Bucket': s3_bucket_name,
+                    'Key': "{}/{}".format("thumbnails", obj['Key'].split("/")[-1])},
+                ExpiresIn=300),  # 1hour
             "last_modified": str(obj['LastModified'])  # datetime.strftime(obj['LastModified'], '%Y/%m/%d %H:%M:%S')
         }
         for obj in objs if obj['Key'].split(".")[-1].lower() in IMAGE_SUFFIX_LIST
