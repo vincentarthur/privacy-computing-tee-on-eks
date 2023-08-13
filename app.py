@@ -5,7 +5,7 @@ from aws_cdk import (
     aws_ec2 as ec2,
     aws_eks as eks,
     aws_iam as iam,
-    Fn, App, RemovalPolicy, Stack, 
+    Fn, App, RemovalPolicy, Stack,
 )
 from aws_cdk import Aspects
 
@@ -28,7 +28,7 @@ def _k8s_manifest_yaml_to_json(file_path):
     """
     with open(file_path, 'r') as file:
         configuration = yaml.safe_load(file)
-    
+
         return configuration
 
 
@@ -39,13 +39,13 @@ def _k8s_manifest_yaml_to_json(file_path):
 ############################################################
 app = App()
 account_id = app.node.try_get_context("ACCOUNT_ID")
-region     = app.node.try_get_context("REGION")
+region = app.node.try_get_context("REGION")
 
 cdk_environment = Environment(
-    account     = account_id,
-    region      = region
+    account=account_id,
+    region=region
 )
-resource_prefix = 'eks_enclaves'
+resource_prefix = app.node.try_get_context("eks_cluster_name")
 
 ############################################################
 ## Step 1 - Create Launch Template for Enclave Template
@@ -53,9 +53,9 @@ resource_prefix = 'eks_enclaves'
 enclages_node_launch_stack = EnclavesNodeLaunchStack(
     app,
     f'EnclavesNodeLaunchTemplate',
-    env                    = cdk_environment,
-    disk_size              = app.node.try_get_context("enclaves_node_disk_size"),
-    ebs_iops               = app.node.try_get_context("enclaves_node_ebs_iops")
+    env=cdk_environment,
+    disk_size=app.node.try_get_context("enclaves_node_disk_size"),
+    ebs_iops=app.node.try_get_context("enclaves_node_ebs_iops")
 )
 
 ############################################################
@@ -64,46 +64,44 @@ enclages_node_launch_stack = EnclavesNodeLaunchStack(
 eks_stack = EKSClusterStack(
     app,
     f'EKS-Enclaves',
-    env                                 = cdk_environment,
-    resource_prefix                     = resource_prefix,
-    enclaves_node_group_launch_template = enclages_node_launch_stack.lt
+    env=cdk_environment,
+    resource_prefix=resource_prefix,
+    enclaves_node_group_launch_template=enclages_node_launch_stack.lt
 )
-
 
 # ############################################################
 # ## Step 3 - Annotate KSA for 02_setup_irsa.sh
 # ############################################################
 # ns_manifest = _k8s_manifest_yaml_to_json('stacks/manifest/aws-nitro-enclaves-k8s-ds-ns.yaml')
 iam_role_name = app.node.try_get_context("enclaves_iam_role")
-irsa_stack  = IRSAStack(
+irsa_stack = IRSAStack(
     app,
     f'IRSAStack',
-    env          = cdk_environment,
-    eks_cluster  = eks_stack.eks_cluster,
-    namespace    = app.node.try_get_context("enclaves_namespace"),
-    ksa          = app.node.try_get_context("enclaves_k8s_service_account"),
-    iam_role_arn = "arn:aws:iam::{}:role/{}".format(account_id, iam_role_name)
+    env=cdk_environment,
+    eks_cluster=eks_stack.eks_cluster,
+    namespace=app.node.try_get_context("enclaves_namespace"),
+    ksa=app.node.try_get_context("enclaves_k8s_service_account"),
+    iam_role_arn="arn:aws:iam::{}:role/{}".format(account_id, iam_role_name)
 )
-            
+
 irsa_stack.add_dependency(eks_stack)
 
-############################################################
-## Step 4 - install device plugin (Manifest)
-##          and Annotate KSA for 02_setup_irsa.sh
-############################################################
+# ###########################################################
+# Step 4 - install device plugin (Manifest)
+#           and Annotate KSA for 02_setup_irsa.sh
+# ###########################################################
 daemonset_manifest = _k8s_manifest_yaml_to_json('stacks/manifest/aws-nitro-enclaves-k8s-ds-daemonset.yaml')
 
 DevicePluginInstallationStack(
     app,
     f'DevicePluginStack',
-    env                = cdk_environment,
-    eks_cluster        = eks_stack.eks_cluster,
-    daemonset_manifest = daemonset_manifest
-    
+    env=cdk_environment,
+    eks_cluster=eks_stack.eks_cluster,
+    daemonset_manifest=daemonset_manifest
+
 ).add_dependency(eks_stack)
 
-
-# FlArbiterServerStack(app, 
+# FlArbiterServerStack(app,
 #                      "ArbiterServer", 
 #                      disk_size = app.node.try_get_context("arbiter_server_disk_size"))
 

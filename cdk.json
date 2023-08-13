@@ -9,6 +9,7 @@
     "REGION": "us-east-1",
     "create_new_cluster_admin_role": "True",
     "existing_admin_role_arn": "",
+    "eks_cluster_name": "eks-enclaves",
     "create_new_vpc": "True",
     "vpc_cidr": "10.0.0.0/22",
     "vpc_cidr_mask_public": 26,
