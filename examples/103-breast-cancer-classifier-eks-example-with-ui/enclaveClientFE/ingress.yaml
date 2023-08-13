@@ -1,0 +1,36 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: client-ui-ingress
+  namespace: fl
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/inbound-cidrs: 0.0.0.0/0
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip #instance
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
+    #Share a single ALB with all Ingress rules with a specific group name
+    # alb.ingress.kubernetes.io/target-type: instance
+    # service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: ip
+    # alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}]'
+    # alb.ingress.kubernetes.io/actions.ssl-redirect: '{"Type": "redirect", "RedirectConfig": { "Protocol": "HTTPS", "Port": "443", "StatusCode": "HTTP_301"}}'
+    # alb.ingress.kubernetes.io/actions.client-svc: '{"Type":"redirect","RedirectConfig":{"Host":"dev.api.new-example.com","Path":"/#{path}","Port":"443","Protocol":"HTTPS","Query":"#{query}","StatusCode":"HTTP_301"}}'
+spec:
+  rules:
+    - http:
+        paths:
+          - backend:
+              service:
+                name: client-svc
+                port:
+                  number: 5050
+            path: /api
+            pathType: Prefix
+          - backend:
+              service:
+                name: client-ui-svc
+                port:
+                  number: 3000
+            path: /
+            pathType: Prefix
+     
