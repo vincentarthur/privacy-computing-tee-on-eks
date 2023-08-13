@@ -46,7 +46,6 @@
 #   |- source 
 #   |- thumbnails (image name : xxxx.png.thumbnail)
 # need to add S3 access to IRSA iam role
-
 1. on `enclaveClient/deployment.yaml`, please also input S3 location. This S3 bucket will store encrypted result.<br/>
    Ongoing this S3 bucket can setup replication to customer's S3 bucket for synchronizing result to remote.
 

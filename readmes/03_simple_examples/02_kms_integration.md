@@ -111,17 +111,22 @@ weight: 10
   "Version": "2012-10-17",
   "Statement": [
     {
-      "Sid": "AllowAuroraToEncryptedDataBucket",
+      "Sid": "VisualEditor0",
       "Effect": "Allow",
       "Action": [
         "s3:GetObject",
-        "s3:ListBucket",
         "s3:GetObjectVersion",
         "s3:ListMultipartUploadParts"
       ],
-      "Resource": [
-        "arn:aws:s3:::<your-bucket-name>/*"
-      ]
+      "Resource": "arn:aws:s3:::<your-bucket-name>/*"
+    },
+    {
+      "Sid": "VisualEditor1",
+      "Effect": "Allow",
+      "Action": [
+        "s3:ListBucket"
+      ],
+      "Resource": "arn:aws:s3:::<your-bucket-name>"
     }
   ]
 }
