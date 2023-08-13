@@ -25,63 +25,103 @@
 - [09. Data Owner Triggers Inference](/readmes/05_multiple_aws_account_medical_image_diagnosis/09_data_owner_inference.md)
 - [10. Add PCR0 for Cryptographic Attestation](/readmes/05_multiple_aws_account_medical_image_diagnosis/10_add_pcr0_for_cryptographic_attestation.md)
 
-#### 103-breast-cancer-classifier-eks-example-2 Dedicated Notice
+### Notice
 
-1. on `enclaveClient/deployment.yaml`, please also input S3 location. This S3 bucket will store encrypted result.<br/>
-   Ongoing this S3 bucket can setup replication to customer's S3 bucket for synchronizing result to remote.
+```markdown
+Difference between `103-breast-cancer-classifier-eks-example-2` and `103-breast-cancer-classifier-eks-example-with-ui`
+
+1. enclaveServer in `103-breast-cancer-classifier-eks-example-2` goes with Image Decryption
+2. enclaveServer in `103-breast-cancer-classifier-eks-example-with-ui` goes *WITHOUT* Image Decryption
+3. enclaveClient in `103-breast-cancer-classifier-eks-example-with-ui` is a backend application (Flask based)
+4. enclaveClientFE in `103-breast-cancer-classifier-eks-example-with-ui` is a frontend application (React based)
+```
+
+#### 103-breast-cancer-classifier-eks-example-with-UI Dedicated Notice
+
+1. Need to create folders under S3 bucket (S3 bucket name could be
+   like `industry-tee-workshop-${ACCOUNT_ID}-${REGION}-kms-bucket`)
 
 ```yaml
-    - name: RESULT_UPLOAD_BUCKET
-      value: "NEED INPUT"
+- s3_bucket
+  - source       # use to store source images
+  - thumbnails   # use to store thumbnails images. File name should look like "xxxx.png.thumbnail"
 ```
 
-2. The KMS key used to encrypt inference result in `Server Side`, is exactly same KMS key to decrypt the data. <br/>
-   So no leakage risk, due to PCR0 condition has been added to KMS Key policy to restrict access from EIF and IRSA. Only
-   IRSA does not work.
-
----
-
-#### 103-breast-cancer-classifier-eks-example-3 Dedicated Notice
-# need to create S3 bucket for storing images with below folder
-#   |- source 
-#   |- thumbnails (image name : xxxx.png.thumbnail)
-# need to add S3 access to IRSA iam role
-1. on `enclaveClient/deployment.yaml`, please also input S3 location. This S3 bucket will store encrypted result.<br/>
-   Ongoing this S3 bucket can setup replication to customer's S3 bucket for synchronizing result to remote.
+2. In `enclaveClient/deploy.yaml`, please input S3 location. This S3 bucket stores source and thumbnail images for
+   display and prediction.<br/>
 
 ```yaml
-    - name: RESULT_UPLOAD_BUCKET
-      value: "NEED INPUT"
+ - name: IMAGES_S3_BUCKET_LOCATION
+   value: "<NEED INPUT>/source"
 ```
 
-2. The KMS key used to encrypt inference result in `Server Side`, is exactly same KMS key to decrypt the data. <br/>
-   So no leakage risk, due to PCR0 condition has been added to KMS Key policy to restrict access from EIF and IRSA. Only
-   IRSA does not work.
+3. In `enclaveClientFE/deploy.yaml`, please input Application LoadBalancer URL. This URL will be display when INGRESS
+   deployed.
 
----
-
-### Data Owner how to decrypt data ?
-
-⚠️ Please run below sections in an environment with sufficient permission (like EC2/Cloud9 with S3 bucket & KMS access)
-
-1. Under `utils` folder, there is a `end_user_decrypt_data_sample.py`. User needs to change line 69 & 70:
-
-```python
-bucket_name = "<S3_Bucket_with_Replication_from_TechProvider>"
-object_name = "<Encrypted result file name (with prefix)>"
-```
-
-2. Install required dependencies
-
-```shell
-pip install -r requirements.txt
-```
-
-3. Run below command to decrypt result
-
-```shell
-python3 end_user_decrypt_data_sample.py
+```yaml
+# line 41
+env:
+  - name: REACT_APP_ALB_URL
+    value: "<Need to update>"
 ```
 
 ---
 
+### Build and Deployment Flow
+
+#### EnclaveServer
+
+```shell
+cd 103-breast-cancer-classifier-eks-example-with-ui/enclaveServer
+bash build_script.sh
+```
+
+#### EnclaveClient
+
+```shell
+cd 103-breast-cancer-classifier-eks-example-with-ui/enclaveClient
+bash build.sh
+
+kubectl apply -f deploy.yaml
+kubectl apply -f client-svc.yaml
+```
+
+#### EnclaveClientFE
+
+```shell
+cd 103-breast-cancer-classifier-eks-example-with-ui/enclaveClientFE
+bash build.sh
+## Ensure you update kubeconfig with executing 
+## aws eks update-kubeconfig --name cluster-eks-enclaves --region ${REGION} --role-arn arn:aws:iam::${ACCOUNT_ID}:role/EKS-Enclaves-ClusterAdminRole<SUFFIX>
+kubectl apply -f deploy.yaml
+
+kubectl apply -f ui-svc.yaml
+
+kubectl apply -f ingress.yaml
+
+# After triggered ingress deployment, wait 3-4 mins and check the domain name of INGRESS, with executing
+# somthing like : k8s-fl-clientui-xxxxxx-xxxxxx.us-east-1.elb.amazonaws.com
+kubectl get ingress -n fl
+```
+
+On Cloud9, click and open `enclaveClientFE/deploy.yaml`, input `ALB domain` into `line 43`:
+
+```yaml
+ env:
+   - name: REACT_APP_ALB_URL
+     value: "<Need to update>"
+```
+
+Update deployment to take effective in frontend deployment.
+
+```shell
+kubectl apply -f deploy.yaml
+```
+
+### Access UI
+
+Open browser and paste ALB domain to access<br /><br />
+![industryscenario-2-ui-overview.png](/static/industryscenario-2-ui-overview.png)<br /><br />
+
+Select "image" for prediction, and click `Predict`, wait 10-20s, get the result.<br /><br />
+![industryscenario-2-ui-result.png](/static/industryscenario-2-ui-result.png)<br /><br />

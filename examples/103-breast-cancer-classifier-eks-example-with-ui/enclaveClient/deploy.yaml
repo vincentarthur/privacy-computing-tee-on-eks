@@ -35,4 +35,4 @@ spec:
             - name: REGION
               value: "us-east-1"
             - name: IMAGES_S3_BUCKET_LOCATION
-              value: "industry-tee-workshop-xxxxx-us-east-1-kms-bucket/source"
+              value: "<NEED INPUT>/source"

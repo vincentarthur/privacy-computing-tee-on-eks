@@ -198,7 +198,7 @@ weight: 10
 ```shell
    # Update ~/.kube/config for interacting with EKS
    # This command can be found in CloudFormation >> Output tab
-   # aws eks update-kubeconfig --name cluster-eks_enclaves --region ${REGION} --role-arn arn:aws:iam::${ACCOUNT_ID}:role/EKS-Enclaves-ClusterAdminRole<SUFFIX>
+   # aws eks update-kubeconfig --name cluster-eks-enclaves --region ${REGION} --role-arn arn:aws:iam::${ACCOUNT_ID}:role/EKS-Enclaves-ClusterAdminRole<SUFFIX>
    
    kubectl apply -f deploy.yaml
 ```

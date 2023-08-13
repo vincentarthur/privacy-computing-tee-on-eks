@@ -3,7 +3,7 @@
 DOCKER_IMAGE_NAME="breast-cancer-classifier"
 
 # Create repository if not exist
-aws ecr create-repository --repository-name ${DOCKER_IMAGE_NAME} --region ${REGION}
+aws ecr describe-repositories --repository-names ${DOCKER_IMAGE_NAME} --region ${REGION} || aws ecr create-repository --repository-name ${DOCKER_IMAGE_NAME} --region ${REGION}
 
 # Build images
 docker build -t ${DOCKER_IMAGE_NAME}:latest .

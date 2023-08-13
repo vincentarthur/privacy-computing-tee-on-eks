@@ -37,7 +37,7 @@ bash 01_install.sh
 5. 进行IRSA在EKS cluster上的配置。
 
 ```shell
-    bash 02_setup_irsa.sh cluster-eks_enclaves # cluster-eks_enclaves为集群名字，如需修改可在上一步骤中进行
+    bash 02_setup_irsa.sh cluster-eks-enclaves # cluster-eks-enclaves为集群名字，如需修改可在上一步骤中进行
 ```
 
 ![image.png](/static/workshop-step-3-deploy-irsa.png)<br/>
@@ -51,7 +51,7 @@ bash 01_install.sh
   REGION=$(curl http://169.254.169.254/latest/meta-data/placement/region -s)
   
   # 运行eksclusterConfigCommandxxx的值（步骤4）
-  aws eks update-kubeconfig --name cluster-eks_enclaves --region ${REGION} --role-arn arn:aws:iam::${ACCOUNT_ID}:role/EKS-Enclaves-ClusterAdminRolexxxx-xxxx
+  aws eks update-kubeconfig --name cluster-eks-enclaves --region ${REGION} --role-arn arn:aws:iam::${ACCOUNT_ID}:role/EKS-Enclaves-ClusterAdminRolexxxx-xxxx
 
   # 查询所有的节点、pod 以及namespace
   kubectl get nodes,pods,ns -A
