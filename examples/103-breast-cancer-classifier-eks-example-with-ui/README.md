@@ -1,9 +1,3 @@
-### Comparing to 103-breast-cancer-classifier-eks-example, 103-breast-cancer-classifier-eks-example-2 has more items as below
-
-- Add features to utilize KMS key to encrypt inference result
-- Save encrypted inference result to S3(in tech providers side)
-- Add example to decrypt data (run on data owner side)
-
 ### [Single AWS Account] Medical Image Diagnosis
 
 - [01. Base Image Creation](/readmes/04_single_aws_account_medical_image_diagnosis/01_build_base_image.md)
