@@ -24,6 +24,21 @@ weight: 10
   - thumbnails   # use to store thumbnails images. File name should look like "xxxx.png.thumbnail"
 ```
 
+可通过以下命令上传图片到S3 bucket.
+
+```shell
+ACCOUNT_ID=$(aws sts get-caller-identity --query "Account" --output text)
+REGION=$(curl http://169.254.169.254/latest/meta-data/placement/region -s)
+BUCKET_NAME="industry-tee-workshop-${ACCOUNT_ID}-${REGION}-kms-bucket"
+
+# upload to source
+find enclaveClient/images/source -type f -name "*.png" |xargs -I {} aws s3 cp {} s3://${BUCKET_NAME}/source
+
+# upload to thumbnail
+find enclaveClient/images/thumbnails -type f -name "*.png" |xargs -I {} aws s3 cp {} s3://${BUCKET_NAME}/thumbnails
+
+```
+
 2. 打开浏览器(新页面), 并输入上一步获得的Application LoadBalancer Domain，会看到类似的以下界面：
    ![industryscenario-2-ui-overview.png](/static/industryscenario-2-ui-overview.png)<br /><br />
 
