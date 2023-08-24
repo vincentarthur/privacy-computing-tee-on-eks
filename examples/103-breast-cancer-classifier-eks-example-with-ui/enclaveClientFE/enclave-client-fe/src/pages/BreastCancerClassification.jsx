@@ -40,7 +40,7 @@ function App({distributions}) {
 
         axios({
             method: 'GET',
-            url: process.env.REACT_APP_ALB_URL + '/api/list_images', 
+            url: '/api/list_images',
             headers: HEADERS
         })
             .then(response => {
@@ -71,17 +71,16 @@ function App({distributions}) {
      * Raise request for PREDICTION
      */
     function predict(_image_s3_path) {
-        
-        axios.post(
-            process.env.REACT_APP_ALB_URL + '/api/predict', 
+
+        axios.post('/api/predict',
             {
-              'image_s3_path': _image_s3_path
+                'image_s3_path': _image_s3_path
             })
-        .then((response) => {
-          console.log(response.data);
-          setPredictionResult(response.data)
-        });
-        
+            .then((response) => {
+                console.log(response.data);
+                setPredictionResult(response.data)
+            });
+
     }
 
 

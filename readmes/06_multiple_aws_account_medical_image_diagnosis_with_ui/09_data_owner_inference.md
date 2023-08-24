@@ -32,10 +32,8 @@ REGION=$(curl http://169.254.169.254/latest/meta-data/placement/region -s)
 BUCKET_NAME="industry-tee-workshop-${ACCOUNT_ID}-${REGION}-kms-bucket"
 
 # upload to source
-find enclaveClient/images/source -type f -name "*.png" |xargs -I {} aws s3 cp {} s3://${BUCKET_NAME}/source
-
-# upload to thumbnail
-find enclaveClient/images/thumbnails -type f -name "*.png" |xargs -I {} aws s3 cp {} s3://${BUCKET_NAME}/thumbnails
+cd enclaveClient/images/
+aws s3 cp ./ s3://${BUCKET_NAME}/ --recursive 
 
 ```
 
