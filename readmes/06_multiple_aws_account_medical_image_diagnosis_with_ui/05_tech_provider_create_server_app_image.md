@@ -16,7 +16,7 @@ weight: 10
 ```shell
     git clone https://github.com/vincentarthur/privacy-computing-tee-on-eks.git
     
-    cd privacy-computing-tee-on-eks/examples/103-breast-cancer-classifier-eks-example/
+    cd privacy-computing-tee-on-eks/examples/103-breast-cancer-classifier-eks-example-with-ui/
 ```
 
 2. 构建enclave base Docker image。这个作为Nitro enclave image 的基础镜像。<br/>

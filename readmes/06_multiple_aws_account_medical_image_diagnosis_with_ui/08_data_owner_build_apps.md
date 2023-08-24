@@ -9,7 +9,7 @@ weight: 10
 #### 部署服务器端（来自模型技术提供方）
 
 1. 该模型已经通过ECR同步到 `<ACCOUNT_ID>.dkr.ecr.us-east-1.amazonaws.com/breast-cancer-classifier`中，因此直接部署即可
-2. 在examples/103-breast-cancer-classifier-eks-example/enclaveServer目录下，找到`deployment.yaml`
+2. 在examples/103-breast-cancer-classifier-eks-example-with-ui/enclaveServer目录下，找到`deployment.yaml`
 3. 修改第25行, 填入正确的 ACCOUNT_ID and REGION
 
 ```shell
