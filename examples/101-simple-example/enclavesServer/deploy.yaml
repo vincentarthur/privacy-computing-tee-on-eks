@@ -24,7 +24,7 @@ spec:
       containers:
       # - image: 536704830979.dkr.ecr.us-east-1.amazonaws.com/simple-ne-server:latest_eif-101
       - image: 536704830979.dkr.ecr.us-east-1.amazonaws.com/simple-ne-server:latest_eif
-        command: ["bash", "/home/run.sh"]
+        command: ["bash", "/app/run.sh"]
 #        command: ["sleep", "36000"]
         imagePullPolicy: Always
         name: server
