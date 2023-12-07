@@ -9,7 +9,7 @@ main() {
     nitro-cli run-enclave --cpu-count $ENCLAVE_CPU_COUNT --memory $ENCLAVE_MEMORY_SIZE \
         --eif-path $EIF_PATH --debug-mode --enclave-cid 99999
 
-    vsock-proxy 8000 kms.us-east-1.amazonaws.com 443 &
+    vsock-proxy 8000 kms."${REGION}".amazonaws.com 443 &
 
     local enclave_id=$(nitro-cli describe-enclaves | jq -r ".[0].EnclaveID")
     echo "-------------------------------"
