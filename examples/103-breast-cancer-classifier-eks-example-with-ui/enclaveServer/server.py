@@ -146,7 +146,7 @@ def decrypt_model(payload):
     src_dir = "/app/breast_cancer_classifier/models/"
     file_name = "ImageOnly__ModeImage_weights.p"
     output_dir = "/app/breast_cancer_classifier/models/"
-    with open("{}/{}.encrypted".format(src_dir, file_name), "rb") as file:
+    with open("{}{}.encrypted".format(src_dir, file_name), "rb") as file:
         file_contents = file.read()
 
     # The first NUM_BYTES_FOR_LEN tells us the length of the encrypted data key
